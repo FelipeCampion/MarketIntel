@@ -1,9 +1,7 @@
 create DB_MarketIntel_Vendas;
-
 go
 
 use DB_MarketIntel_Vendas;
-
 go 
 
 create table vendas(
@@ -49,5 +47,20 @@ lote_produto varchar(20),
 data_venda datetime2 not null,
 data_troca datetime2 default sysutcdatetime
 );
+
+go
+
+
+alter table vendas
+add constraint fk_vendas_pagamento foreign key (forma_pagamento) references forma_pagamento (id_forma_pagamento);
+
+alter table vendas_lucros
+add constraint fk_lucros_vendas foreign key (id_venda) references vendas (id_venda);
+
+alter table trocas
+add constraint fk_trocas_vendas foreign key (id_venda) references vendas (id_venda);
+
+alter table historico_vendas
+add constraint fk_hist_vendas foreign key (id_venda) references vendas (id_venda);
 
 go
