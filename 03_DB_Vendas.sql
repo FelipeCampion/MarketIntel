@@ -70,36 +70,3 @@ go
 create synonym dim_clientes for db_marketintel_crm.dbo.clientes;
 create synonym dim_produtos for db_marketintel_produtos.dbo.produtos;
 go
-
-use db_marketintel_vendas;
-go
-
-create procedure sp_registrar_venda
-    @id_cliente bigint,
-    @id_produto bigint,
-    @qtd int,
-    @forma_pgto int
-as
-begin
-    set nocount on;
-    declare @preco decimal(10,2);
-    
-    select @preco = preco_produto from dim_produtos where id_produto = @id_produto;
-
-    if @preco is not null
-    begin
-        insert into vendas (id_cliente, id_produto, quantidade_itens, valor_venda, forma_pagamento, status_venda)
-        values (@id_cliente, @id_produto, @qtd, (@preco * @qtd), @forma_pgto, 'concluido');
-
-        update dim_produtos 
-        set quant_disponivel = quant_disponivel - @qtd
-        where id_produto = @id_produto;
-        
-        print 'venda realizada e estoque atualizado!';
-    end
-    else
-    begin
-        raiserror('produto nao encontrado ou sem preco definido.', 16, 1);
-    end
-end;
-go
