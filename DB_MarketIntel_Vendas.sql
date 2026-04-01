@@ -64,3 +64,10 @@ alter table historico_vendas
 add constraint fk_hist_vendas foreign key (id_venda) references vendas (id_venda);
 
 go
+
+use db_marketintel_vendas;
+go
+
+create synonym dim_clientes for db_marketintel_crm.dbo.clientes;
+create synonym dim_produtos for db_marketintel_produtos.dbo.produtos;
+go
