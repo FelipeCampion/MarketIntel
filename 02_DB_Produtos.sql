@@ -82,3 +82,19 @@ go
 
 create synonym fato_vendas for db_marketintel_vendas.dbo.vendas;
 go
+
+use db_marketintel_produtos;
+go
+
+create trigger trg_verificar_estoque_minimo
+on produtos
+after update
+as
+begin
+    insert into produtos_em_falta (id_produto, quant_disponivel, id_fornecedor, custo_compra_unid)
+    select i.id_produto, i.quant_disponivel, i.id_fornecedor, i.custo_compra_unid
+    from inserted i
+    where i.quant_disponivel <= 5
+    and not exists (select 1 from produtos_em_falta where id_produto = i.id_produto);
+end;
+go
