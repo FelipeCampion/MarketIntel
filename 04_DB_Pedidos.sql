@@ -10,9 +10,9 @@ id_cliente bigint,
 id_produto bigint,
 quantidade_itens int,
 valor_venda decimal(10,2),
-endereco_entrega text,
+endereco_entrega varchar(max),
 taxa_entrega decimal(10,2),
-forma_pagameno varchar(25),
+forma_pagamento varchar(25),
 data_entrega_prevista date not null,
 data_pedido datetime2 default sysutcdatetime,
 email_cliente varchar(100)
@@ -24,9 +24,9 @@ id_cliente bigint,
 id_produto bigint,
 quantidade_itens int,
 valor_venda decimal(10,2),
-endereco_entrega text,
+endereco_entrega varchar(max),
 taxa_entrega decimal(10,2),
-forma_pagameno varchar(25),
+forma_pagamento varchar(25),
 data_entrega_prevista date not null,
 data_pedido datetime2 default sysutcdatetime,
 email_cliente varchar(100)
@@ -48,7 +48,7 @@ id_cliente bigint,
 id_pedido bigint,
 id_produto bigint,
 valor_venda decimal(10,2),
-endereco_entrega text,
+endereco_entrega varchar(max),
 taxa_entrega decimal(10,2),
 data_entrega_realizada date not null,
 codigo_entrega varchar(4),
@@ -61,7 +61,7 @@ id_cliente bigint,
 id_pedido bigint,
 id_produto bigint,
 valor_venda decimal(10,2),
-endereco_entrega text,
+endereco_entrega varchar(max),
 taxa_entrega decimal(10,2),
 data_entrega_realizada date not null,
 codigo_entrega varchar(4),
@@ -90,9 +90,6 @@ add constraint fk_entrega_pedido_ecom foreign key (id_pedido) references pedidos
 
 alter table entregas_presenciais
 add constraint fk_entrega_pedido_presencial foreign key (id_pedido) references pedidos_presenciais (id_pedido);
-
-alter table historico_pedidos
-add constraint fk_hist_pedido_ecom foreign key (id_pedido) references pedidos_ecom (id_pedido);
 
 go
 
