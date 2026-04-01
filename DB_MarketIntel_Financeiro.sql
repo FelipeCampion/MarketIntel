@@ -13,7 +13,6 @@ custo_compra_unid decimal(10,2),
 custo_compra_total decimal(10,2)
 );
 
-
 create table contas_a_pagar(
 id_conta bigint identity(1,1) primary key,
 id_compra int,
@@ -52,4 +51,8 @@ qtd_total_vendas int,
 ticket_medio decimal(10,2)
 );
 
+go
+
+alter table contas_a_pagar
+add constraint fk_contas_compra foreign key (id_compra) references compra_produto (id_compra);
 go
