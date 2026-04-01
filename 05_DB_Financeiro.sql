@@ -67,3 +67,27 @@ create synonym dim_tipo_produto for db_marketintel_produtos.dbo.tipo;
 create synonym fato_vendas for db_marketintel_vendas.dbo.vendas;
 create synonym fato_pedidos_ecom for db_marketintel_pedidos.dbo.pedidos_ecom;
 go
+
+use db_marketintel_financeiro;
+go
+
+create procedure sp_gerar_fechamento_mensal
+    @mes int,
+    @ano int
+as
+begin
+    declare @faturamento_vendas decimal(15,2);
+    declare @faturamento_pedidos decimal(15,2);
+
+    select @faturamento_vendas = sum(valor_venda) from fato_vendas 
+    where month(data_venda) = @mes and year(data_venda) = @ano;
+
+    select @faturamento_pedidos = sum(valor_venda) from fato_pedidos_ecom 
+    where month(data_pedido) = @mes and year(data_pedido) = @ano;
+
+    insert into fechamento_mensal_vendas (mes_referencia, ano_referencia, faturamento_total_real)
+    values (@mes, @ano, isnull(@faturamento_vendas,0) + isnull(@faturamento_pedidos,0));
+    
+    print 'fechamento financeiro gerado com sucesso!';
+end;
+go
