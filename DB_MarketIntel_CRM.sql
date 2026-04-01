@@ -14,3 +14,5 @@ telefone_celular varchar(9),
 data_cadastro datetime2 default sysutcdatetime,
 endereco_entrega varchar(200)
 );
+
+go
