@@ -49,3 +49,5 @@ lote_produto varchar(20),
 data_venda datetime2 not null,
 data_troca datetime2 default sysutcdatetime
 );
+
+go
