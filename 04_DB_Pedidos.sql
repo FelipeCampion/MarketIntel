@@ -99,20 +99,3 @@ go
 create synonym dim_clientes for db_marketintel_crm.dbo.clientes;
 create synonym dim_produtos for db_marketintel_produtos.dbo.produtos;
 go
-
-use db_marketintel_pedidos;
-go
-
-create trigger trg_calcular_lucro_pedido
-on pedidos_ecom
-after insert
-as
-begin
-    insert into pedidose_lucros (id_pedido, valor_lucro_pedido)
-    select 
-        i.id_pedido,
-        (i.valor_venda - (p.custo_compra_unid * i.quantidade_itens))
-    from inserted i
-    inner join dim_produtos p on i.id_produto = p.id_produto;
-end;
-go
