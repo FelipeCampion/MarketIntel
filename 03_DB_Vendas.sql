@@ -74,7 +74,6 @@ go
 use db_marketintel_vendas;
 go
 
--- procedure: registrar venda e baixar estoque em outro banco
 create procedure sp_registrar_venda
     @id_cliente bigint,
     @id_produto bigint,
