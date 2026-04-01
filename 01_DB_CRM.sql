@@ -10,7 +10,7 @@ nome varchar(100) not null,
 data_nascimento date not null,
 email varchar(100) not null unique,
 ddd varchar(2),
-telefone_celular varchar(9),
+telefone_celular varchar(15),
 data_cadastro datetime2 default sysutcdatetime,
 endereco_entrega varchar(200)
 );
