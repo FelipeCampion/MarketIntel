@@ -76,3 +76,5 @@ add constraint fk_fpt_tipo foreign key (id_tipo) references tipo (id_tipo);
 alter table produtos_em_falta
 add constraint fk_pef_prod foreign key (id_produto) references produtos (id_produto),
 add constraint fk_pef_forn foreign key (id_fornecedor) references fornecedores (id_fornecedor);
+
+go
