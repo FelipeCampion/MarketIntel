@@ -78,3 +78,20 @@ data_venda datetime2 not null
 );
 
 go
+
+alter table pedidose_lucros
+add constraint fk_lucro_pedido_ecom foreign key (id_pedido) references pedidos_ecom (id_pedido);
+
+alter table pedidosp_lucros
+add constraint fk_lucro_pedido_presencial foreign key (id_pedido) references pedidos_presenciais (id_pedido);
+
+alter table entregas_ecom
+add constraint fk_entrega_pedido_ecom foreign key (id_pedido) references pedidos_ecom (id_pedido);
+
+alter table entregas_presenciais
+add constraint fk_entrega_pedido_presencial foreign key (id_pedido) references pedidos_presenciais (id_pedido);
+
+alter table historico_pedidos
+add constraint fk_hist_pedido_ecom foreign key (id_pedido) references pedidos_ecom (id_pedido);
+
+go
