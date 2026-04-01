@@ -89,11 +89,11 @@ status_venda varchar(20)
 );
 
 create table vendas_lucros(
-id_pedido int,
+id_venda int,
 valor_lucro_venda decimal(10,2)
 );
 
-create table forma_pagameno(
+create table forma_pagamento(
 id_forma_pagamento int identity(1,1) primary key,
 nome_forma_pagamento varchar(25)
 );
@@ -124,7 +124,11 @@ forma_pagameno varchar(25),
 data_entrega_prevista date not null,
 data_pedido datetime2 default sysutcdatetime,
 email_cliente varchar(100),
-lucro decimal(10,2)
+);
+
+create table pedidose_lucros(
+id_pedido int,
+valor_lucro_pedido decimal(10,2)
 );
 
 create table pedidos_presenciais(
@@ -138,16 +142,33 @@ taxa_entrega decimal(10,2),
 forma_pagameno varchar(25),
 data_entrega_prevista date not null,
 data_pedido datetime2 default sysutcdatetime,
-email_cliente varchar(100),
-lucro decimal(10,2)
+email_cliente varchar(100)
 );
 
-create table pedidos_lucros(
+create table pedidose_lucros(
 id_pedido int,
 valor_lucro_pedido decimal(10,2)
 );
 
-create table entregas(
+create table pedidosp_lucros(
+id_pedido int,
+valor_lucro_pedido decimal(10,2)
+);
+
+create table entregas_ecom(
+id_entrega bigint identity(1,1) primary key,
+id_cliente int,
+id_pedido int,
+id_produto int,
+valor_venda decimal(10,2),
+endereco_entrega text,
+taxa_entrega decimal(10,2),
+data_entrega_realizada date not null,
+codigo_entrega varchar(4),
+status_entrega varchar(11)
+);
+
+create table entregas_presencias(
 id_entrega bigint identity(1,1) primary key,
 id_cliente int,
 id_pedido int,
@@ -208,10 +229,55 @@ add constraint fk_tipo_cp foreign key (id_tipo) references tipo (id_tipo),
 add constraint fk_for_cp foreign key (id_fornecedor) references fornecedores (id_fornecedor);
 
 alter table vendas
-add constraint fk_p
+add constraint fk_cliente_vend foreign key (id_cliente) references clientes (id_cliente),
+add constraint fk_prod_vend foreign key (id_produto) references produtos (id_produto),
+add constraint fk_quant_vend foreign key (quant_disponivel) references produtos (quant_disponivel),
+add constraint fk_formapag_vend foreign key (forma_pagamento) references forma_pagamento (id_forma_pagamento);
+
+alter table vendas_lucros
+add constraint fk_vend_vl foreign key (id_venda) references vendas (id_venda);
+
+alter table trocas
+add constraint fk_cliente_tro foreign key (id_cliente) references clientes (id_cliente),
+add constraint fk_vend_tro foreign key (id_venda) references vendas (id_venda),
+add constraint fk_prod_tro foreign key (id_produto) references produtos (id_produto),
+add constraint fk_prodn_tro foreign key (id_produto_novo) references produtos (id_produto),
+add constraint fk_lote_tro foreign key (lote_produto) references produtos (lote),
+add constraint fk_datav_tro foreign key (data_venda) references vendas (data_venda);
+
+alter table pedidos_ecom
+add constraint fk_cliente_pedie foreign key (id_cliente) references clientes (id_cliente),
+add constraint fk_prod_pedie foreign key (id_produto) references produtos (id_produto),
+add constraint fk_formapag_pedie foreign key (forma_pagamento) references forma_pagamento (id_forma_pagamento),
+add constraint fk_email_pedie foreign key (email_cliente) references clientes (email);
+
+alter table pedidose_lucros
+add constraint fk_ped_pedel foreign key (id_pedido) references pedidos_ecom (id_pedido);
+
+alter table pedidosp_lucros
+add constraint fk_ped_pedpl foreign key (id_pedido) references pedidos_presenciais (id_pedido);
+
+alter table pedidos_presenciais
+add constraint fk_cliente_pedip foreign key (id_cliente) references clientes (id_cliente),
+add constraint fk_prod_pedip foreign key (id_produto) references produtos (id_produto),
+add constraint fk_formapag_pedip foreign key (forma_pagamento) references forma_pagamento (id_forma_pagamento),
+add constraint fk_email_pedip foreign key (email_cliente) references clientes (email);
+
+alter table entregas_ecom
+add constraint fk_cliente_ente foreign key (id_cliente) references clientes (id_cliente),
+add constraint fk_ped_ente foreign key (id_pedido) references pedidos_ecom (id_pedido),
+add constraint fk_prod_ente foreign key (id_produto) references produtos (id_produto),
+add constraint fk_end_ente foreign key (endereco_entrega) references pedidos_ecom (endereco_entrega),
+add constraint fk_taxa_ente foreign key (taxa_entrega) references pedidos_ecom (taxa_entrega);
+
+alter table entregas_presenciais
+add constraint fk_cliente_entp foreign key (id_cliente) references clientes (id_cliente),
+add constraint fk_ped_entp foreign key (id_pedido) references pedidos_ecom (id_pedido),
+add constraint fk_prod_entp foreign key (id_produto) references produtos (id_produto),
+add constraint fk_end_entp foreign key (endereco_entrega) references pedidos_ecom (endereco_entrega),
+add constraint fk_taxa_entp foreign key (taxa_entrega) references pedidos_ecom (taxa_entrega);
 
 
-
-
+-- continuar as tabelas e dps fazer as triggers e as procedures de acordo
 
 
