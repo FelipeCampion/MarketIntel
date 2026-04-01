@@ -95,3 +95,10 @@ alter table historico_pedidos
 add constraint fk_hist_pedido_ecom foreign key (id_pedido) references pedidos_ecom (id_pedido);
 
 go
+
+use db_marketintel_pedidos;
+go
+
+create synonym dim_clientes for db_marketintel_crm.dbo.clientes;
+create synonym dim_produtos for db_marketintel_produtos.dbo.produtos;
+go
