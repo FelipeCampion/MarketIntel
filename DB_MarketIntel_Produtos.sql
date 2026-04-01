@@ -78,3 +78,9 @@ add constraint fk_pef_prod foreign key (id_produto) references produtos (id_prod
 add constraint fk_pef_forn foreign key (id_fornecedor) references fornecedores (id_fornecedor);
 
 go
+
+use db_marketintel_produtos;
+go
+
+create synonym fato_vendas for db_marketintel_vendas.dbo.vendas;
+go
