@@ -1,4 +1,4 @@
-create DB_MarketIntel_Vendas;
+create database DB_MarketIntel_Vendas;
 go
 
 use DB_MarketIntel_Vendas;
@@ -42,7 +42,7 @@ id_produto bigint,
 quantidade_itens int,
 id_produto_novo bigint,
 quantidade_itens_novos int,
-motivo_troca text,
+motivo_troca varchar(max),
 lote_produto varchar(20),
 data_venda datetime2 not null,
 data_troca datetime2 default sysutcdatetime
