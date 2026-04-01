@@ -1,4 +1,4 @@
-create DB_MarketIntel_Produtos;
+create database DB_MarketIntel_Produtos;
 go
 
 use DB_MarketIntel_Produtos;
