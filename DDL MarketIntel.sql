@@ -44,7 +44,7 @@ primary key (id_produto, id_tipo)
 create table fornecedores(
 id_fornecedor bigint identity(1,1) primary key,
 nome varchar(100) not null,
-ddd int(2) not null,
+ddd int not null,
 telefone_celular varchar(9),
 email varchar(100) not null unique,
 marca varchar(100) not null,
