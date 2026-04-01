@@ -55,4 +55,15 @@ go
 
 alter table contas_a_pagar
 add constraint fk_contas_compra foreign key (id_compra) references compra_produto (id_compra);
+
+go
+
+use db_marketintel_financeiro;
+go
+
+create synonym dim_produtos for db_marketintel_produtos.dbo.produtos;
+create synonym dim_fornecedores for db_marketintel_produtos.dbo.fornecedores;
+create synonym dim_tipo_produto for db_marketintel_produtos.dbo.tipo;
+create synonym fato_vendas for db_marketintel_vendas.dbo.vendas;
+create synonym fato_pedidos_ecom for db_marketintel_pedidos.dbo.pedidos_ecom;
 go
