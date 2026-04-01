@@ -1,4 +1,4 @@
-create DB_MarketIntel_CRM;
+create database DB_MarketIntel_CRM;
 go
 
 use DB_MarketIntel_CRM;
