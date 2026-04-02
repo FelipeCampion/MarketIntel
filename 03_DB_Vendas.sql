@@ -5,52 +5,52 @@ use DB_MarketIntel_Vendas;
 go 
 
 create table forma_pagamento(
-    id_forma_pagamento int identity(1,1) primary key,
-    nome_forma_pagamento varchar(25)
+id_forma_pagamento int identity(1,1) primary key,
+nome_forma_pagamento varchar(25)
 );
 
 create table vendas(
-    id_venda bigint identity(1,1) primary key,
-    id_cliente bigint, 
-    valor_venda_total decimal(10,2) default 0,
-    data_venda datetime2 default sysutcdatetime,
-    id_forma_pagamento int,
-    status_venda varchar(20)
+id_venda bigint identity(1,1) primary key,
+id_cliente bigint, 
+valor_venda_total decimal(10,2) default 0,
+data_venda datetime2 default sysutcdatetime,
+id_forma_pagamento int,
+status_venda varchar(20)
 );
 
 create table itens_venda(
-    id_item_venda bigint identity(1,1) primary key,
-    id_venda bigint not null,
-    id_produto bigint not null, 
-    quantidade_itens int not null,
-    valor_unitario decimal(10,2) not null,
-    valor_subtotal as (quantidade_itens * valor_unitario) 
+id_item_venda bigint identity(1,1) primary key,
+id_venda bigint not null,
+id_produto bigint not null, 
+quantidade_itens int not null,
+valor_unitario decimal(10,2) not null,
+valor_subtotal as (quantidade_itens * valor_unitario) 
 );
 
 create table vendas_lucros(
-    id_venda_lucro bigint identity(1,1) primary key,
-    id_venda bigint,
-    valor_lucro_venda decimal(10,2)
+id_venda_lucro bigint identity(1,1) primary key,
+id_venda bigint,
+valor_lucro_venda decimal(10,2)
 );
 
 create table historico_vendas(
-    id_historico bigint identity(1,1) primary key,
-    id_venda bigint,
-    id_cliente bigint,
-    valor_venda_total decimal(10,2),
-    data_venda datetime2 not null
+id_historico bigint identity(1,1) primary key,
+id_venda bigint,
+id_cliente bigint,
+valor_venda_total decimal(10,2),
+data_venda datetime2 not null
 );
 
 create table trocas(
-    id_troca bigint identity(1,1) primary key,
-    id_venda bigint, 
-    id_produto_antigo bigint,
-    quantidade_antiga int,
-    id_produto_novo bigint,
-    quantidade_nova int,
-    motivo_troca varchar(max),
-    lote_produto varchar(20),
-    data_troca datetime2 default sysutcdatetime
+id_troca bigint identity(1,1) primary key,
+id_venda bigint, 
+id_produto_antigo bigint,
+quantidade_antiga int,
+id_produto_novo bigint,
+quantidade_nova int,
+motivo_troca varchar(max),
+lote_produto varchar(20),
+data_troca datetime2 default sysutcdatetime
 );
 go
 
