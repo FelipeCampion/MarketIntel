@@ -30,6 +30,23 @@ exec sp_registrar_venda @id_cliente = 1, @id_produto = 1, @qtd = 2, @forma_pgto 
 exec sp_registrar_venda @id_cliente = 2, @id_produto = 2, @qtd = 1, @forma_pgto = 2;
 go
 
+use db_marketintel_pedidos;
+go
+insert into pedidos_ecom (id_cliente, endereco_entrega, taxa_entrega, forma_pagamento, data_entrega_prevista, email_cliente)
+values (1, 'rua do sql, 123', 15.00, 'Cartao Credito', '2026-04-10', 'felipe@email.com');
+
+declare @id_pedido_criado bigint = scope_identity();
+
+insert into itens_pedido_ecom (id_venda, id_produto, quantidade_itens, valor_unitario)
+values 
+(@id_pedido_criado, 1, 1, 250.00),
+(@id_pedido_criado, 2, 1, 800.00);
+
+update pedidos_ecom 
+set valor_venda_total = (select sum(valor_subtotal) from itens_pedido_ecom where id_venda = @id_pedido_criado)
+where id_pedido = @id_pedido_criado;
+go
+
 use db_marketintel_financeiro;
 go
 insert into metas_vendas (id_tipo_produto, mes_referencia, ano_referencia, valor_meta_faturamento, qtd_meta_itens)
