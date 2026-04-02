@@ -57,16 +57,17 @@ use db_marketintel_pedidos;
 go
 
 create or alter trigger trg_calcular_lucro_pedido
-on pedidos_ecom
+on itens_pedido_ecom
 after insert
 as
 begin
     insert into pedidose_lucros (id_pedido, valor_lucro_pedido)
     select 
-        i.id_pedido,
-        (i.valor_venda - (p.custo_compra_unid * i.quantidade_itens))
+        i.id_venda, 
+        sum(i.valor_subtotal - (p.custo_compra_unid * i.quantidade_itens))
     from inserted i
-    inner join dim_produtos p on i.id_produto = p.id_produto;
+    inner join dim_produtos p on i.id_produto = p.id_produto
+    group by i.id_venda;
 end;
 go
 
@@ -81,10 +82,12 @@ begin
     declare @faturamento_vendas decimal(15,2);
     declare @faturamento_pedidos decimal(15,2);
 
-    select @faturamento_vendas = sum(valor_venda_total) from fato_vendas 
+    select @faturamento_vendas = sum(valor_venda_total) 
+    from db_marketintel_vendas.dbo.vendas 
     where month(data_venda) = @mes and year(data_venda) = @ano;
 
-    select @faturamento_pedidos = sum(valor_venda) from fato_pedidos_ecom 
+    select @faturamento_pedidos = sum(valor_venda_total) 
+    from db_marketintel_pedidos.dbo.pedidos_ecom 
     where month(data_pedido) = @mes and year(data_pedido) = @ano;
 
     insert into fechamento_mensal_vendas (mes_referencia, ano_referencia, faturamento_total_real)
