@@ -24,9 +24,9 @@ go
 
 use db_marketintel_vendas;
 go
+insert into forma_pagamento (nome_forma_pagamento) values ('Cartao Credito'), ('Boleto'), ('Pix');
 
 exec sp_registrar_venda @id_cliente = 1, @id_produto = 1, @qtd = 2, @forma_pgto = 1;
-
 exec sp_registrar_venda @id_cliente = 2, @id_produto = 2, @qtd = 1, @forma_pgto = 2;
 go
 
