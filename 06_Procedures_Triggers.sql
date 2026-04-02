@@ -1,7 +1,7 @@
 use db_marketintel_produtos;
 go
 
-create trigger trg_verificar_estoque_minimo
+create or alter trigger trg_verificar_estoque_minimo
 on produtos
 after update
 as
@@ -17,7 +17,7 @@ go
 use db_marketintel_vendas;
 go
 
-create procedure sp_registrar_venda
+create or alter procedure sp_registrar_venda
     @id_cliente bigint,
     @id_produto bigint,
     @qtd int,
@@ -26,13 +26,19 @@ as
 begin
     set nocount on;
     declare @preco decimal(10,2);
+    declare @id_venda_gerada bigint;
     
     select @preco = preco_produto from dim_produtos where id_produto = @id_produto;
 
     if @preco is not null
     begin
-        insert into vendas (id_cliente, id_produto, quantidade_itens, valor_venda, forma_pagamento, status_venda)
-        values (@id_cliente, @id_produto, @qtd, (@preco * @qtd), @forma_pgto, 'concluido');
+        insert into vendas (id_cliente, id_forma_pagamento, status_venda, valor_venda_total)
+        values (@id_cliente, @forma_pgto, 'concluido', (@preco * @qtd));
+
+        set @id_venda_gerada = scope_identity();
+
+        insert into itens_venda (id_venda, id_produto, quantidade_itens, valor_unitario)
+        values (@id_venda_gerada, @id_produto, @qtd, @preco);
 
         update dim_produtos 
         set quant_disponivel = quant_disponivel - @qtd
@@ -50,14 +56,7 @@ go
 use db_marketintel_pedidos;
 go
 
-create synonym dim_clientes for db_marketintel_crm.dbo.clientes;
-create synonym dim_produtos for db_marketintel_produtos.dbo.produtos;
-go
-
-use db_marketintel_pedidos;
-go
-
-create trigger trg_calcular_lucro_pedido
+create or alter trigger trg_calcular_lucro_pedido
 on pedidos_ecom
 after insert
 as
@@ -74,7 +73,7 @@ go
 use db_marketintel_financeiro;
 go
 
-create procedure sp_gerar_fechamento_mensal
+create or alter procedure sp_gerar_fechamento_mensal
     @mes int,
     @ano int
 as
@@ -82,7 +81,7 @@ begin
     declare @faturamento_vendas decimal(15,2);
     declare @faturamento_pedidos decimal(15,2);
 
-    select @faturamento_vendas = sum(valor_venda) from fato_vendas 
+    select @faturamento_vendas = sum(valor_venda_total) from fato_vendas 
     where month(data_venda) = @mes and year(data_venda) = @ano;
 
     select @faturamento_pedidos = sum(valor_venda) from fato_pedidos_ecom 
