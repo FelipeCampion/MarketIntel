@@ -117,7 +117,7 @@ begin
 end;
 go
 
-use db_marketingintel_produtos;
+use db_marketintel_produtos;
 go
 
 create or alter trigger trg_auditoria_preco
