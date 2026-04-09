@@ -22,6 +22,10 @@ insert into produtos (tipo_produto, fabricacao, validade, lote, marca, id_fornec
 values 
 (1, '2026-01-01', '2029-01-01', 'lote_001', 'logitech', 1, 50, 250.00, 150.00, 100.00, 1010),
 (2, '2026-02-15', '2030-01-01', 'lote_h05', 'corsair', 2, 20, 800.00, 550.00, 250.00, 1011);
+
+update produtos set preco_produto = 300.00 where id_produto = 1;
+
+select * from log_precos;
 go
 
 use db_marketintel_vendas;
