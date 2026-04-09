@@ -51,8 +51,17 @@ venda_media decimal(10,2),
 quantidade_minima_estoque int
 );
 
-go
+create table log_precos(
+id_log bigint identity(1,1) primary key,
+id_produto bigint not null,
+preco_antigo decimal(10,2),
+preco_novo decimal(10,2),
+data_alteracao datetime2 default sysutcdatetime(),
+usuario_alteracao varchar(50) default suser_sname(),
+);
 
+go
+  
 alter table produtos
 add constraint fk_prod_tipo foreign key (tipo_produto) references tipo (id_tipo);
 
@@ -63,5 +72,8 @@ add constraint fk_pf_fornecedor foreign key (id_fornecedor) references fornecedo
 alter table produtos_em_falta
 add constraint fk_pef_prod foreign key (id_produto) references produtos (id_produto),
 add constraint fk_pef_forn foreign key (id_fornecedor_sugerido) references fornecedores (id_fornecedor);
+
+alter table log_produtos
+add constraint fk_log_prod foreign key (id_produto) references produtos (id_produto);
 
 go
