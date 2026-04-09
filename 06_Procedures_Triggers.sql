@@ -139,3 +139,33 @@ begin
     end
 end;
 go
+
+use db_marketintel_produtos;
+go
+
+create or alter procedure sp_sugestao_compra_barata
+as
+begin
+    set nocount on;
+
+    with cte_melhor_preco as (
+        select 
+            id_produto,
+            id_fornecedor,
+            custo_compra_especifico,
+            row_number() over(partition by id_produto order by custo_compra_especifico asc) as rank_preco
+        from produtos_fornecedores
+    )
+    select 
+        p.id_produto,
+        p.marca as nome_produto,
+        p.quant_disponivel as estoque_atual,
+        f.nome as fornecedor_mais_barato,
+        m.custo_compra_especifico as preco_ofertado
+    from produtos p
+    inner join cte_melhor_preco m on p.id_produto = m.id_produto
+    inner join fornecedores f on m.id_fornecedor = f.id_fornecedor
+    where p.quant_disponivel <= 5 
+    and m.rank_preco = 1;
+end;
+go
