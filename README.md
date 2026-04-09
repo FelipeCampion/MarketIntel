@@ -4,7 +4,7 @@ o **marketintel** é um ecossistema de dados corporativo desenvolvido em **sql s
 
 ---
 
-## 🚀 novas funcionalidades
+## 🚀 Novas funcionalidades
 
 * **mecanismo de pagamento a prazo:** automação de fluxo de caixa que gera automaticamente parcelas e datas de vencimento na tabela de `contas_a_receber` via laços de repetição (`while`) em stored procedures.
 * **gestão de suprimentos n:n:** evolução do modelo de fornecedores para um relacionamento "muitos para muitos". agora, um produto pode ter múltiplos fornecedores com custos e prazos distintos, permitindo inteligência na escolha do melhor parceiro de compra.
@@ -12,7 +12,7 @@ o **marketintel** é um ecossistema de dados corporativo desenvolvido em **sql s
 
 ---
 
-## diferenciais técnicos
+## Diferenciais técnicos
 * **arquitetura distribuída:** segregação em 5 bancos de dados (crm, produtos, vendas, pedidos e financeiro).
 * **interoperabilidade via synonyms:** comunicação transparente entre bases de dados distintas através de sinônimos.
 * **atomicidade em transações:** uso de `begin transaction` e `rollback` para garantir a integridade dos dados em operações financeiras complexas.
@@ -20,24 +20,24 @@ o **marketintel** é um ecossistema de dados corporativo desenvolvido em **sql s
 
 ---
 
-## estrutura do ecossistema
+## Estrutura do ecossistema
 
-o projeto segue uma ordem lógica de execução para garantir a integridade das referências:
+O projeto segue uma ordem lógica de execução para garantir a integridade das referências:
 
-1.  **`01_db_crm`**: gestão de clientes e dados de contato.
-2.  **`02_db_produtos`**: catálogo, gestão multi-fornecedor e controle de estoque.
-3.  **`03_db_vendas`**: pdv com automação de parcelamento e vendas diretas.
-4.  **`04_db_pedidos`**: fluxo omnichannel (e-commerce e presencial).
-5.  **`05_db_financeiro`**: inteligência de bi, fechamentos mensais e metas.
-6.  **`06_procedures_triggers`**: camada de automação e regras de negócio em lowercase.
-7.  **`07_dml_povoamento`**: script de carga inicial para testes de integração.
+1.  **`01_db_crm`**: Gestão de clientes e dados de contato.
+2.  **`02_db_produtos`**: Catálogo, gestão multi-fornecedor e controle de estoque.
+3.  **`03_db_vendas`**: Pdv com automação de parcelamento e vendas diretas.
+4.  **`04_db_pedidos`**: Fluxo omnichannel (e-commerce e presencial).
+5.  **`05_db_financeiro`**: Inteligência de bi, fechamentos mensais e metas.
+6.  **`06_procedures_triggers`**: Camada de automação e regras de negócio em lowercase.
+7.  **`07_dml_povoamento`**: Script de carga inicial para testes de integração.
 
 ---
 
-## como executar
-1. certifique-se de ter o **sql server** instalado.
-2. execute os scripts na ordem numérica (01 a 07).
-3. após o script 07, utilize a procedure para testar o parcelamento automático:
+## Como executar
+1. Ccertifique-se de ter o **sql server** instalado.
+2. Execute os scripts na ordem numérica (01 a 07).
+3. Após o script 07, utilize a procedure para testar o parcelamento automático:
 
 ```sql
 /* registra uma venda parcelada em 3x */
