@@ -1,38 +1,52 @@
 # 🏗️ MarketIntel: Arquitetura de Dados Multibancos
 
-O **MarketIntel** é um ecossistema de dados corporativo desenvolvido em **SQL Server (T-SQL)**. O projeto simula um ambiente real de alta escalabilidade, onde diferentes domínios de negócio são segregados em bancos de dados independentes, mas integrados de forma inteligente.
+o **marketintel** é um ecossistema de dados corporativo desenvolvido em **sql server (t-sql)**. o projeto simula um ambiente real de alta escalabilidade, utilizando uma arquitetura distribuída para gerir fluxos complexos de suprimentos e finanças.
 
 ---
 
-## Diferenciais Técnicos
-* **Arquitetura Distribuída:** Separação de responsabilidades em 5 bancos de dados (CRM, Produtos, Vendas, Pedidos e Financeiro).
-* **Interoperabilidade via Synonyms:** Uso de Sinônimos para comunicação transparente entre bases de dados distintas.
-* **Automação de Negócio:** Implementação de `Stored Procedures` para vendas e `Triggers` para controle automático de estoque e cálculo de lucro.
-* **Integridade Lógica:** Modelagem de tabelas de histórico preparadas para consolidar dados de múltiplas origens (Omnichannel).
+## 🚀 novas funcionalidades
+
+* **mecanismo de pagamento a prazo:** automação de fluxo de caixa que gera automaticamente parcelas e datas de vencimento na tabela de `contas_a_receber` via laços de repetição (`while`) em stored procedures.
+* **gestão de suprimentos n:n:** evolução do modelo de fornecedores para um relacionamento "muitos para muitos". agora, um produto pode ter múltiplos fornecedores com custos e prazos distintos, permitindo inteligência na escolha do melhor parceiro de compra.
+* **cálculo de lucro automatizado:** implementação de triggers que calculam o lucro líquido de cada venda em tempo real, confrontando o preço de venda com o custo médio de aquisição do produto.
 
 ---
 
-## Estrutura do Ecossistema
-
-O projeto segue uma ordem lógica de execução para garantir a integridade das referências:
-
-1.  **`01_DB_CRM`**: Gestão de Clientes e dados sensíveis de contato.
-2.  **`02_DB_Produtos`**: Catálogo de produtos, gestão de fornecedores e controle de estoque.
-3.  **`03_DB_Vendas`**: Processamento de vendas diretas e PDV.
-4.  **`04_DB_Pedidos`**: Fluxo de pedidos de E-commerce e Presenciais (Omnichannel).
-5.  **`05_DB_Financeiro`**: Inteligência de BI, fechamentos mensais, metas e projeções.
-6.  **`06_Procedures_Triggers`**: Camada de automação e regras de negócio.
-7.  **`07_DML_Povoamento`**: Script de carga inicial para testes de integração.
+## diferenciais técnicos
+* **arquitetura distribuída:** segregação em 5 bancos de dados (crm, produtos, vendas, pedidos e financeiro).
+* **interoperabilidade via synonyms:** comunicação transparente entre bases de dados distintas através de sinônimos.
+* **atomicidade em transações:** uso de `begin transaction` e `rollback` para garantir a integridade dos dados em operações financeiras complexas.
+* **normalização avançada:** estrutura mestre-detalhe e tabelas associativas para eliminar redundância e garantir a consistência (3fn).
 
 ---
 
-## Como Executar
-1. Certifique-se de ter o **SQL Server** instalado.
-2. Execute os scripts na ordem numérica (01 a 07).
-3. Após o script 07, utilize as Procedures para testar a integração:
-   ```sql
-   exec db_marketintel_vendas.dbo.sp_registrar_venda 
-        @id_cliente = 1, 
-        @id_produto = 1, 
-        @qtd = 2, 
-        @forma_pgto = 1;
+## estrutura do ecossistema
+
+o projeto segue uma ordem lógica de execução para garantir a integridade das referências:
+
+1.  **`01_db_crm`**: gestão de clientes e dados de contato.
+2.  **`02_db_produtos`**: catálogo, gestão multi-fornecedor e controle de estoque.
+3.  **`03_db_vendas`**: pdv com automação de parcelamento e vendas diretas.
+4.  **`04_db_pedidos`**: fluxo omnichannel (e-commerce e presencial).
+5.  **`05_db_financeiro`**: inteligência de bi, fechamentos mensais e metas.
+6.  **`06_procedures_triggers`**: camada de automação e regras de negócio em lowercase.
+7.  **`07_dml_povoamento`**: script de carga inicial para testes de integração.
+
+---
+
+## como executar
+1. certifique-se de ter o **sql server** instalado.
+2. execute os scripts na ordem numérica (01 a 07).
+3. após o script 07, utilize a procedure para testar o parcelamento automático:
+
+```sql
+/* registra uma venda parcelada em 3x */
+exec db_marketintel_vendas.dbo.sp_registrar_venda 
+    @id_cliente = 1, 
+    @id_produto = 1, 
+    @qtd = 2, 
+    @forma_pgto = 1, 
+    @num_parcelas = 3;
+
+/* consulte as parcelas geradas */
+select * from db_marketintel_vendas.dbo.contas_a_receber;
