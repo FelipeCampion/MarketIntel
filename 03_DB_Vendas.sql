@@ -15,7 +15,8 @@ id_cliente bigint,
 valor_venda_total decimal(10,2) default 0,
 data_venda datetime2 default sysutcdatetime,
 id_forma_pagamento int,
-status_venda varchar(20)
+status_venda varchar(20),
+qtd_parcelas_escolhida int default 1
 );
 
 create table itens_venda(
@@ -25,6 +26,17 @@ id_produto bigint not null,
 quantidade_itens int not null,
 valor_unitario decimal(10,2) not null,
 valor_subtotal as (quantidade_itens * valor_unitario) 
+);
+
+create table contas_a_receber(
+id_conta_receber bigint identity(1,1) primary key,
+id_venda bigint not null,
+numero_parcela int not null,
+valor_parcela decimal(10,2) not null,
+data_vencimento date not null,
+status_pagamento varchar(20) default 'pendente',
+data_pagamento_realizado datetime2 null,
+observacao varchar(255) null
 );
 
 create table vendas_lucros(
@@ -59,6 +71,9 @@ add constraint fk_vendas_pagamento foreign key (id_forma_pagamento) references f
 
 alter table itens_venda
 add constraint fk_itens_venda_pai foreign key (id_venda) references vendas (id_venda);
+
+alter table contas_a_receber
+add constraint fk_contas_venda foreign key (id_venda) references vendas (id_venda);
 
 alter table vendas_lucros
 add constraint fk_lucros_vendas foreign key (id_venda) references vendas (id_venda);
