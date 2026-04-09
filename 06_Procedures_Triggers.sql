@@ -116,3 +116,26 @@ begin
     print 'fechamento financeiro gerado com sucesso!';
 end;
 go
+
+use db_marketingintel_produtos;
+go
+
+create or alter trigger trg_auditoria_preco
+on produtos
+after update
+as
+begin
+    set nocount on;
+    if update(preco_produto)
+    begin
+        insert into log_precos (id_produto, preco_antigo, preco_novo)
+        select 
+            d.id_produto, 
+            d.preco_produto, 
+            i.preco_produto
+        from deleted d
+        inner join inserted i on d.id_produto = i.id_produto
+        where d.preco_produto <> i.preco_produto;
+    end
+end;
+go
