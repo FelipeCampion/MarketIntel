@@ -1,5 +1,6 @@
 use db_marketintel_crm;
 go
+
 insert into clientes (nome, data_nascimento, email, ddd, telefone_celular, endereco_entrega)
 values 
 ('felipe campion', '1995-05-15', 'felipe@email.com', '19', '999998888', 'rua do sql, 123'),
@@ -9,6 +10,7 @@ go
 
 use db_marketintel_produtos;
 go
+
 insert into tipo (nome_tipo) values ('perifericos'), ('hardware'), ('monitores');
 
 insert into fornecedores (nome, ddd, email, marca) 
@@ -24,16 +26,19 @@ go
 
 use db_marketintel_vendas;
 go
-insert into forma_pagamento (nome_forma_pagamento) values ('Cartao Credito'), ('Boleto'), ('Pix');
 
-exec sp_registrar_venda @id_cliente = 1, @id_produto = 1, @qtd = 2, @forma_pgto = 1;
-exec sp_registrar_venda @id_cliente = 2, @id_produto = 2, @qtd = 1, @forma_pgto = 2;
+insert into forma_pagamento (nome_forma_pagamento) values ('cartao credito'), ('boleto'), ('pix');
+
+exec sp_registrar_venda @id_cliente = 1, @id_produto = 1, @qtd = 2, @forma_pgto = 1, @num_parcelas = 3;
+
+exec sp_registrar_venda @id_cliente = 2, @id_produto = 2, @qtd = 1, @forma_pgto = 2, @num_parcelas = 1;
 go
 
 use db_marketintel_pedidos;
 go
+
 insert into pedidos_ecom (id_cliente, endereco_entrega, taxa_entrega, forma_pagamento, data_entrega_prevista, email_cliente)
-values (1, 'rua do sql, 123', 15.00, 'Cartao Credito', '2026-04-10', 'felipe@email.com');
+values (1, 'rua do sql, 123', 15.00, 'cartao credito', '2026-04-10', 'felipe@email.com');
 
 declare @id_pedido_criado bigint = scope_identity();
 
@@ -49,6 +54,7 @@ go
 
 use db_marketintel_financeiro;
 go
+
 insert into metas_vendas (id_tipo_produto, mes_referencia, ano_referencia, valor_meta_faturamento, qtd_meta_itens)
 values (1, 4, 2026, 5000.00, 20); 
 
